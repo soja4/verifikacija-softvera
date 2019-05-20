@@ -1,0 +1,1 @@
+Razvoj smo radili u jupyter notebook okruzenju jer smo imali problema sa pokretanjem python file-a. Problem u tom pristupu je sto KLEE generisane fajlove ne mozemo da prosledimo kao parametar, pa smo samim tim morali da hardcode-ujemo vrednosti iz .ts fajla. 
