@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  
+  
+<script>
+
+var arrayIstats=[];
+var izvorniKod=[];
+
+var arrayPaths=[];
+var sviPaths="";
+
+var pathsFajlovi=[];
+
+var instrukcijeKoda=[];
+
+var instrukcije=[];
+
+var izlazniFajl;
+
+
+function dispFile(contents) {
+
+  document.getElementById('divPrikaz').style.visibility="visible"
+  document.getElementById('openIstats').style.visibility="visible"
+  
+  document.getElementById('openSourceCode').style.visibility="hidden"   
+  document.getElementById('contents').innerHTML=contents
+}
+
+function dispFile1(contents1) {
+
+  document.getElementById('parsirajIstats').style.visibility="visible"
+  document.getElementById('openIstats').style.visibility="hidden"
+
+  document.getElementById('divPrikaz1').style.visibility="visible"
+  document.getElementById('contents1').innerHTML=contents1
+}
+
+function dispFile2(contents1) {
+
+  document.getElementById('divPrikaz1').style.height="260px"
+  document.getElementById('divPaths').style.height="240px"
+
+  document.getElementById('divPaths').style.visibility="visible"
+  
+  if (arrayPaths.length==instrukcije.length) {
+  
+   // document.getElementById('pathObavestenje').innerHTML="";
+
+
+  }
+  else {
+  
+  let razlika=instrukcije.length - arrayPaths.length;
+  let obavestanje;
+  
+  if (razlika<10) {
+	 obavestanje="Otvoriti test00000" + (arrayPaths.length+1)  + ".sym.path fajl"
+  }
+  if (razlika>=10) {
+	 obavestanje="Otvoriti test0000" + (arrayPaths.length+1)  + ".sym.path fajl"
+  }
+  
+  	document.getElementById('pathObavestenje').innerHTML=obavestanje;
+	//test000001.path
+  }
+  
+  document.getElementById('contentPaths').innerHTML=contents1
+}
+
+
+function clickElem(elem) {
+    // Thx user1601638 on Stack Overflow (6/6/2018 - https://stackoverflow.com/questions/13405129/javascript-create-and-save-file )
+    var eventMouse = document.createEvent("MouseEvents")
+    eventMouse.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
+    elem.dispatchEvent(eventMouse)
+}
+
+
+function openFile(func) {
+    readFile = function(e) {
+        var file = e.target.files[0];
+        if (!file) {
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = function(e) {
+				
+		var array = e.target.result.split("\n");
+		
+		let linija;
+		var array1=[];
+		
+		let kod="";
+		
+		for (var i=0;i<array.length;i++) {
+			linija = (i+1)  + ". " + array[i] + "\n";
+			
+			linija=linija.replace('<','&lt'); 
+			linija=linija.replace('>','&gt'); 
+
+			kod+=linija;
+			array1.push({rbr: (i+1), kod: linija});
+			
+			izvorniKod.push(array[i].trim());
+		}
+		
+			console.log(array1);
+			
+            var contents = kod.trim();
+            fileInput.func(contents)
+            document.body.removeChild(fileInput)
+        }
+        reader.readAsText(file)
+    }
+    fileInput = document.createElement("input")
+    fileInput.type='file'
+    fileInput.style.display='none'
+    fileInput.onchange=readFile
+    fileInput.func=func
+    document.body.appendChild(fileInput)
+    clickElem(fileInput)
+}
+
+function openFile1(func) {
+readFile = function(e) {
+        var file = e.target.files[0];
+        if (!file) {
+            return;
+        }
+		
+		var reader = new FileReader();
+
+		reader.onload = function(e) {
+			let array = e.target.result.split("\n");
+
+			var array1=[];
+			
+			let kod="";
+			let linija;
+
+			
+			for (var i=0;i<array.length;i++) {
+				linija = array[i] + "\n";
+				
+				linija=linija.replace('<','&lt'); 
+				linija=linija.replace('>','&gt'); 
+
+				kod+=linija;
+				array1.push({rbr: i, kod: linija});
+			
+			}
+			
+			arrayIstats=array1;
+				var contents = kod.trim();
+				fileInput.func(contents)
+				document.body.removeChild(fileInput)
+        }
+        reader.readAsText(file)
+    }
+    fileInput = document.createElement("input")
+    fileInput.type='file'
+    fileInput.style.display='none'
+    fileInput.onchange=readFile
+    fileInput.func=func
+    document.body.appendChild(fileInput)
+    clickElem(fileInput)
+
+}
+
+
+
+function openPaths(func) {
+
+   readFile = function(e) {
+        var file = e.target.files[0];
+        if (!file) {
+            return;
+        }
+		
+		var reader = new FileReader();		
+		var imeFajla=file.name
+
+		reader.onload = function(e) {
+			
+			let array = e.target.result.split("\n");
+			
+			let linija=imeFajla + ": ";
+			let linija1="";
+
+			for (var i=0;i<array.length;i++) {
+				linija += array[i] + " ";
+				linija1+=array[i].trim();				
+			}
+			
+			sviPaths+=linija + "\n";	
+			
+			arrayPaths.push(linija1);			
+			
+			fileInput.func(sviPaths.trim())
+			document.body.removeChild(fileInput)
+			
+			if(arrayPaths.length!=0) { //dugme kreiraj fajl vidljivo
+				document.getElementById('kreirajFajll').style.visibility="visible"
+			}
+			
+		}
+		
+		reader.readAsText(file) 
+	}	
+		
+    fileInput = document.createElement("input")
+    fileInput.type='file'
+    fileInput.style.display='none'
+    fileInput.onchange=readFile
+    fileInput.func=func
+    document.body.appendChild(fileInput)
+    clickElem(fileInput)
+}
+
+function parsirajIstats() {
+
+let p=arrayIstats[0].kod;
+
+let kod1="";
+
+let istats=[];
+
+let indexPom;
+
+	for (let i=0;i<arrayIstats.length;i++) {
+			if (arrayIstats[i].kod.trim()=="fn=main")
+				indexPom=i; //parsiramo sve do main funkcije
+		}		
+
+	for (let ii=25;ii<indexPom;ii++) {	
+		
+		kod1+=arrayIstats[ii].kod;
+		
+		let istArray=arrayIstats[ii].kod.split(" ");
+		
+		let prviKarakter=istArray[0];
+		let poslednjiKarakter=istArray[14];
+		
+		if (Number.isInteger(+prviKarakter)&& Number.isInteger(+poslednjiKarakter)) {
+		
+			if (+poslednjiKarakter>0)
+				instrukcije.push({"instrukcija": +istArray[1], "grana": +istArray[2]});
+		}			
+	}
+	
+	//instrukcije=instrukcije.filter(distinct);
+	
+	let linijaKoda="";
+	
+	for (let k of instrukcije) {
+								  
+		let linijaPom=izvorniKod[(k.instrukcija-1)].trim();
+		
+		linijaPom=linijaPom.replace('{',''); //izbacujemo viticaste zagrade
+		linijaPom=linijaPom.replace('}','');
+		
+		linijaPom=linijaPom.replace('(',''); //izbacujemo zagrade
+		linijaPom=linijaPom.replace(')','');
+		
+		linijaPom=linijaPom.replace('if','');
+
+		let pomSplit=linijaPom.split("||"); //trazimo ili uslove da bi razdvojili
+		
+		if (pomSplit.length==0) { //ako ne postoji ||
+			
+			instrukcijeKoda.push(linijaPom);
+			
+			linijaKoda=linijaKoda + "(linija koda: " + k.instrukcija + "): "
+							  +  linijaPom + "\n";
+					
+		}
+		
+		if (pomSplit.length!=0) { //ako  postoji ||
+		
+			for (let is of pomSplit) {
+			
+				if (!instrukcijeKoda.includes(is.trim())) { //ako ne postoji uslov dodajemo ga u niz
+					
+					instrukcijeKoda.push(is.trim()); 
+					
+					linijaKoda=linijaKoda + "(linija koda: " + k.instrukcija + "): "
+							  +  is.trim() + "\n";			
+					}			
+			}			
+		}
+						
+	}
+	
+	let instrukcijeKodaPom=[];
+	for (let ins of instrukcijeKoda) { 
+		instrukcijeKodaPom.push("("+ins+")"); //ubacujemo zagrade zbog lakseg dodavanja uslova u cvorovima stabla
+	}
+	
+	instrukcijeKoda=instrukcijeKodaPom
+	 
+	console.log(instrukcije);
+	
+	console.log("Instrukcije koda: " + instrukcijeKoda);
+					
+	document.getElementById('contents1').innerHTML=linijaKoda.trim();
+	
+	document.getElementById('istatsSpan').innerHTML="Parsiran run.istats fajl";
+	
+    document.getElementById('parsirajPath').style.visibility="visible";
+	
+	document.getElementById('openIstats').style.visibility="hidden";
+
+	document.getElementById('parsirajIstats').style.visibility="hidden";
+
+	
+	document.getElementById('pathObavestenje').innerHTML="Otvoriti test000001.sym.path fajl";
+	
+
+}
+
+const distinct=(value,index,self)=> {
+		return self.indexOf(value)===index;
+	}
+	
+	
+function kreirajFajl() {
+
+	console.log("Kreiraj fajl");
+	
+	let izlaz="";
+	
+	let counter=-1;
+		
+	arrayPaths.forEach((paths,index) => {
+		
+		let uslov="";
+		
+		for (let i=0;i<paths.length;i++){
+		
+			if (+paths[i]==1) { //ako je 1-ica ubacujemo uslov sa pozicije i	
+				
+				if (i==0) 
+					uslov+=instrukcijeKoda[i];
+				else 
+					uslov=uslov+ " ^ " + instrukcijeKoda[i]; //ako je sym path duzine vece od 1 dodajemo ^ 
+			}
+			
+			if (+paths[i]==0) { //ako je 0- negiramo uslov	sa pozicije i
+				
+				if (i==0) 
+					uslov=uslov + "~" + instrukcijeKoda[i];
+				else 
+					uslov=uslov+ " ^ ~" + instrukcijeKoda[i]; //ako je sym path duzine vece od 1 dodajemo ^ 
+			}			
+		}
+			
+		let izlazPom= index + "," + paths + "," + uslov.trim() + ", \n";
+		
+		izlaz+=izlazPom;
+					
+	});
+	
+	let pathFajlovi= document.getElementById('contents1').innerHTML;
+	let parsiranIstats= document.getElementById('contentPaths').innerHTML;
+	
+	document.getElementById('contents1').innerHTML= pathFajlovi +  "\n \n" + parsiranIstats;
+	
+	document.getElementById('istatsSpan').innerHTML="Parsiran run.istats fajl i sym.paths fajlovi";
+	document.getElementById('pathObavestenje').innerHTML="";
+
+	
+    document.getElementById('contentPaths').innerHTML=izlaz;
+	document.getElementById('pathFileName').innerHTML="Sadržaj izlanog fajla upisan u klee.output.txt";
+	
+	
+	izlazniFajl=izlaz;
+	
+	saveTextAsFile();
+	console.log(izlaz);
+}
+
+
+function saveTextAsFile()
+{
+
+	var textToWrite = izlazniFajl;
+    var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
+	
+
+    var fileNameToSaveAs ="klee.output.txt";
+    var downloadLink = document.createElement("a");
+	
+    downloadLink.download = fileNameToSaveAs;
+    downloadLink.innerHTML = "Download File";
+    if (window.webkitURL != null)
+    {
+        downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+    }
+    else
+    {
+        downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+        downloadLink.onclick = destroyClickedElement;
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
+    }
+
+    downloadLink.click();
+	
+	document.getElementById('kreirajFajll').style.visibility="hidden"
+	document.getElementById('parsirajPath').style.visibility="hidden"
+}
+
+</script>
+
+
+</head>
+<body>
+
+<div class="col-sm-12 col-md-12 col-xs-12">
+
+<div class="col-sm-12 col-md-12 col-xs-12" style="padding-top:15px;padding-left:10px;margin-left:10px">
+
+    <button id="openSourceCode" onclick="openFile(dispFile)" class="btn btn-info">1. OTVORI fajl sa izvornim kodom</button>
+    
+	<button id="openIstats" onclick="openFile1(dispFile1)" style="margin-left:25px;visibility:hidden" class="btn btn-warning">2. OTVORI run.istats fajl</button>
+
+    <button id="parsirajIstats" onclick="parsirajIstats()" class="btn btn-success" style="margin-left:25px;visibility:hidden">3. PARSIRAJ run.istats</button>
+
+	<button id="parsirajPath" onclick="openPaths(dispFile2)" class="btn btn-danger" style="margin-left:25px;visibility:hidden">4. OTVORI I PARSIRAJ Test sym.path fajlove</button>
+
+	<span id="pathObavestenje"> </span>
+	
+</div>
+
+    
+<div class="col-sm-12 col-md-12 col-xs-12" style="height:520px;position:relative;">
+    
+    <div class="col-sm-6 col-md-6 col-xs-6" id="divPrikaz" style="max-height:100%;overflow:auto;margin-top:15px;padding-left:10px;visibility:hidden;"> 
+        <span style="margin-top:5px;margin-bottom:5px">Izvorni kod </span>
+        <pre id="contents"> </pre>
+        
+        </textarea>
+    </div>
+    
+    <div class="col-sm-6 col-md-6 col-xs-6" id="divPrikaz1" style="max-height:100%;overflow:auto;margin-top:15px;visibility:hidden;"> 
+                <span id="istatsSpan" style="margin-top:5px;margin-bottom:5px">run.istats fajl </span>
+
+		<pre id="contents1"></pre>
+    </div>
+	
+	
+    <div class="col-sm-6 col-md-6 col-xs-6" id="divPaths" style="max-height:100%;overflow:auto;margin-top:15px;visibility:hidden;"> 
+                <span id="pathFileName" style="margin-top:5px;margin-bottom:5px">Sym.paths fajlovi </span>
+					<button id="kreirajFajll" onclick="kreirajFajl()" class="btn btn-default" style="margin-left:25px;visibility:hidden;margin-bottom:5px">5. KREIRAJ FAJL</button>
+
+		<pre id="contentPaths"></pre>
+    </div>
+	
+	
+</div>
+
+</div>
+
+<body>
+
+</html>
