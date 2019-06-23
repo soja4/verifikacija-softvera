@@ -42,37 +42,6 @@ function dispFile1(contents1) {
   document.getElementById('contents1').innerHTML=contents1
 }
 
-function dispFile2(contents1) {
-
-  document.getElementById('divPrikaz1').style.height="260px"
-  document.getElementById('divPaths').style.height="240px"
-
-  document.getElementById('divPaths').style.visibility="visible"
-  
-  if (arrayPaths.length==instrukcije.length) {
-  
-   // document.getElementById('pathObavestenje').innerHTML="";
-
-
-  }
-  else {
-  
-  let razlika=instrukcije.length - arrayPaths.length;
-  let obavestanje;
-  
-  if (razlika<10) {
-	 obavestanje="Otvoriti test00000" + (arrayPaths.length+1)  + ".sym.path fajl"
-  }
-  if (razlika>=10) {
-	 obavestanje="Otvoriti test0000" + (arrayPaths.length+1)  + ".sym.path fajl"
-  }
-  
-  	document.getElementById('pathObavestenje').innerHTML=obavestanje;
-	//test000001.path
-  }
-  
-  document.getElementById('contentPaths').innerHTML=contents1
-}
 
 
 function clickElem(elem) {
@@ -174,56 +143,6 @@ readFile = function(e) {
 
 }
 
-
-
-function openPaths(func) {
-
-   readFile = function(e) {
-        var file = e.target.files[0];
-        if (!file) {
-            return;
-        }
-		
-		var reader = new FileReader();		
-		var imeFajla=file.name
-
-		reader.onload = function(e) {
-			
-			let array = e.target.result.split("\n");
-			
-			let linija=imeFajla + ": ";
-			let linija1="";
-
-			for (var i=0;i<array.length;i++) {
-				linija += array[i] + " ";
-				linija1+=array[i].trim();				
-			}
-			
-			sviPaths+=linija + "\n";	
-			
-			arrayPaths.push(linija1);			
-			
-			fileInput.func(sviPaths.trim())
-			document.body.removeChild(fileInput)
-			
-			if(arrayPaths.length!=0) { //dugme kreiraj fajl vidljivo
-				document.getElementById('kreirajFajll').style.visibility="visible"
-			}
-			
-		}
-		
-		reader.readAsText(file) 
-	}	
-		
-    fileInput = document.createElement("input")
-    fileInput.type='file'
-    fileInput.style.display='none'
-    fileInput.onchange=readFile
-    fileInput.func=func
-    document.body.appendChild(fileInput)
-    clickElem(fileInput)
-}
-
 function parsirajIstats() {
 
 let p=arrayIstats[0].kod;
@@ -320,7 +239,7 @@ let indexPom;
 	document.getElementById('parsirajIstats').style.visibility="hidden";
 
 	
-	document.getElementById('pathObavestenje').innerHTML="Otvoriti test000001.sym.path fajl";
+	//document.getElementById('pathObavestenje').innerHTML="Otvoriti test000001.sym.path fajl";
 	
 
 }
@@ -417,6 +336,63 @@ function saveTextAsFile()
 	document.getElementById('parsirajPath').style.visibility="hidden"
 }
 
+
+  function GetFileInfo () {
+     
+	var fileInput = document.getElementById ("files");    
+		  
+	readmultifiles(fileInput.files)
+
+}
+
+function readmultifiles(files) {
+  var reader = new FileReader();  
+  function readFile(index) {
+    if( index >= files.length ) return;
+    var file = files[index];
+    reader.onload = function(e) {  
+     
+	 // get file content  
+      var bin = e.target.result;
+	  ///
+	  
+	  	var imeFajla=file.name
+
+	  	let array = e.target.result.split("\n");
+			
+			let linija=imeFajla + ": ";
+			let linija1="";
+
+			for (var i=0;i<array.length;i++) {
+				linija += array[i] + " ";
+				linija1+=array[i].trim();				
+			}
+			
+			sviPaths+=linija + "\n";	
+			
+			arrayPaths.push(linija1);			
+						
+			if(arrayPaths.length!=0) { //dugme kreiraj fajl vidljivo
+				document.getElementById('kreirajFajll').style.visibility="visible"
+			}  
+	  
+      // do sth with bin
+	   if( index == files.length-1 ) {
+	   
+			document.getElementById('divPaths').style.height="240px"
+			document.getElementById('divPaths').style.visibility="visible"
+			document.getElementById('contentPaths').innerHTML=sviPaths;
+			document.getElementById('parsirajPath').style.visibility="hidden";
+
+		}
+
+      readFile(index+1)
+    }
+    reader.readAsBinaryString(file);
+  }
+  readFile(0);
+}
+
 </script>
 
 
@@ -427,14 +403,18 @@ function saveTextAsFile()
 
 <div class="col-sm-12 col-md-12 col-xs-12" style="padding-top:15px;padding-left:10px;margin-left:10px">
 
-    <button id="openSourceCode" onclick="openFile(dispFile)" class="btn btn-info">1. OTVORI fajl sa izvornim kodom</button>
+    <!-- <input type="file" id="fileInput" multiple="multiple" size="60" onchange="GetFileInfo ()" /> -->
+
+    <button id="openSourceCode" onclick="openFile(dispFile)" class="btn btn-info">1. OTVORI fajl sa izvornim kodom</button> 
     
 	<button id="openIstats" onclick="openFile1(dispFile1)" style="margin-left:25px;visibility:hidden" class="btn btn-warning">2. OTVORI run.istats fajl</button>
 
     <button id="parsirajIstats" onclick="parsirajIstats()" class="btn btn-success" style="margin-left:25px;visibility:hidden">3. PARSIRAJ run.istats</button>
 
-	<button id="parsirajPath" onclick="openPaths(dispFile2)" class="btn btn-danger" style="margin-left:25px;visibility:hidden">4. OTVORI I PARSIRAJ Test sym.path fajlove</button>
+	<input type="file" id="files" multiple="multiple" size="60" onchange="GetFileInfo ()" style="margin-left:25px;display:none" /> 
 
+	<button id="parsirajPath" onclick="document.getElementById('files').click();" class="btn btn-danger" style="margin-left:25px;visibility:hidden">4. OTVORI I PARSIRAJ Test sym.path fajlove</button>
+		
 	<span id="pathObavestenje"> </span>
 	
 </div>
