@@ -1,0 +1,21 @@
+/home/jana/klee/Release+Asserts/bin/klee -write-sym-paths pointer_error_sym.bc
+PID: 17777
+Started: 2019-07-04 16:18:06
+BEGIN searcher description
+<InterleavedSearcher> containing 2 searchers:
+RandomPathSearcher
+WeightedRandomSearcher::CoveringNew
+</InterleavedSearcher>
+END searcher description
+Finished: 2019-07-04 16:18:06
+Elapsed: 00:00:00
+KLEE: done: explored paths = 8
+KLEE: done: avg. constructs per query = 10
+KLEE: done: total queries = 4
+KLEE: done: valid queries = 0
+KLEE: done: invalid queries = 4
+KLEE: done: query cex = 4
+
+KLEE: done: total instructions = 315
+KLEE: done: completed paths = 8
+KLEE: done: generated tests = 5

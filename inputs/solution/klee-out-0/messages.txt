@@ -1,0 +1,2 @@
+KLEE: ERROR: /home/jana/Desktop/verifikacija-softvera/inputs/solution/solution.c:35: ASSERTION FAIL: 0
+KLEE: NOTE: now ignoring this error at this location

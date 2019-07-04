@@ -1,0 +1,6 @@
+Error: ASSERTION FAIL: 0
+File: /home/jana/Desktop/verifikacija-softvera/inputs/solution/solution.c
+Line: 35
+assembly.ll line: 93
+Stack: 
+	#000000093 in main (argc=1, argv=52478160) at /home/jana/Desktop/verifikacija-softvera/inputs/solution/solution.c:35

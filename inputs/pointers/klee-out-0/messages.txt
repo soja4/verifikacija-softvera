@@ -1,0 +1,2 @@
+KLEE: ERROR: /home/jana/Desktop/verifikacija-softvera/inputs/pointers/pointer_error_sym.c:24: memory error: out of bound pointer
+KLEE: NOTE: now ignoring this error at this location

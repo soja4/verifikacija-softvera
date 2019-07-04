@@ -274,9 +274,9 @@ function kreirajFajl() {
 			if (+paths[i]==0) { //ako je 0- negiramo uslov	sa pozicije i
 				
 				if (i==0) 
-					uslov=uslov + "~" + instrukcijeKoda[i];
+					uslov=uslov + "!" + instrukcijeKoda[i];
 				else 
-					uslov=uslov+ " ^ ~" + instrukcijeKoda[i]; //ako je sym path duzine vece od 1 dodajemo ^ 
+					uslov=uslov+ " ^ !" + instrukcijeKoda[i]; //ako je sym path duzine vece od 1 dodajemo ^ 
 			}			
 		}
 			

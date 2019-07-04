@@ -1,0 +1,21 @@
+/home/jana/klee/Release+Asserts/bin/klee -write-sym-paths prime.bc
+PID: 20031
+Started: 2019-07-04 16:48:49
+BEGIN searcher description
+<InterleavedSearcher> containing 2 searchers:
+RandomPathSearcher
+WeightedRandomSearcher::CoveringNew
+</InterleavedSearcher>
+END searcher description
+Finished: 2019-07-04 16:48:50
+Elapsed: 00:00:01
+KLEE: done: explored paths = 13
+KLEE: done: avg. constructs per query = 112
+KLEE: done: total queries = 18
+KLEE: done: valid queries = 4
+KLEE: done: invalid queries = 14
+KLEE: done: query cex = 18
+
+KLEE: done: total instructions = 293
+KLEE: done: completed paths = 13
+KLEE: done: generated tests = 6

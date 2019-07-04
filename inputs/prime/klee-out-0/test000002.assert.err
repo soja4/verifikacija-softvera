@@ -1,0 +1,6 @@
+Error: ASSERTION FAIL: 0
+File: /home/jana/Desktop/VERIFIKACIJA/KLEE/07_materijali/prime.c
+Line: 33
+assembly.ll line: 99
+Stack: 
+	#000000099 in main () at /home/jana/Desktop/VERIFIKACIJA/KLEE/07_materijali/prime.c:33

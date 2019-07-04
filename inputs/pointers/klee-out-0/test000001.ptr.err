@@ -1,0 +1,13 @@
+Error: memory error: out of bound pointer
+File: /home/jana/Desktop/verifikacija-softvera/inputs/pointers/pointer_error_sym.c
+Line: 24
+assembly.ll line: 78
+Stack: 
+	#000000078 in fja (p1, p2, p3, p=54333536) at /home/jana/Desktop/verifikacija-softvera/inputs/pointers/pointer_error_sym.c:24
+	#100000112 in main (argc=1, argv=54164128) at /home/jana/Desktop/verifikacija-softvera/inputs/pointers/pointer_error_sym.c:36
+Info: 
+	address: 54333554
+	next: object at 54334176 of size 4
+		MO95[4] allocated at main():  %p1 = alloca i32, align 4
+	prev: object at 54333536 of size 17
+		MO94[17] allocated at main():  %s = alloca [17 x i8], align 16

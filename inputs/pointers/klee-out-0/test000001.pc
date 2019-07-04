@@ -1,0 +1,10 @@
+array p1[4] : w32 -> w8 = symbolic
+array p2[4] : w32 -> w8 = symbolic
+array p3[4] : w32 -> w8 = symbolic
+(query [(Eq 0
+             (ReadLSB w32 0 p1))
+         (Eq 0
+             (ReadLSB w32 0 p2))
+         (Eq 0
+             (ReadLSB w32 0 p3))]
+        false)

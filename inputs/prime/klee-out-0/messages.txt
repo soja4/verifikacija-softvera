@@ -1,0 +1,2 @@
+KLEE: ERROR: /home/jana/Desktop/VERIFIKACIJA/KLEE/07_materijali/prime.c:33: ASSERTION FAIL: 0
+KLEE: NOTE: now ignoring this error at this location
